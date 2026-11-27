@@ -3,151 +3,101 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101a2d">
-  <title>MarketLab — Stock Market Simulation</title>
+  <meta name="theme-color" content="#08111f">
+  <title>Meridian Markets — Stock Market Simulator</title>
   <style>
-    :root{color-scheme:dark;--bg:#0b1220;--panel:#111c2f;--panel2:#17243a;--line:#25344d;--text:#eef4ff;--muted:#91a1bb;--green:#32d296;--red:#ff6b78;--blue:#77a9ff;--gold:#ffca68}
-    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;font-weight:700;color:#071321;background:var(--green)}button:hover{filter:brightness(1.08)}button.secondary{color:var(--text);background:var(--panel2);border:1px solid var(--line)}button.sell{background:#ff8790}button:disabled{opacity:.45;cursor:not-allowed}.wrap{max-width:1250px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}.brand{font-size:22px;font-weight:850;letter-spacing:-.5px}.brand span{color:var(--green)}.subtle{color:var(--muted);font-size:13px}.top-actions{display:flex;align-items:center;gap:10px}.pill{padding:7px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}.welcome{background:linear-gradient(115deg,#182a46,#142038);border:1px solid var(--line);border-radius:14px;padding:19px 22px;margin-bottom:18px}.welcome strong{color:var(--gold)}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:17px 0}.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px}.card{padding:16px}.label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}.value{font-size:25px;font-weight:750;margin-top:5px}.positive{color:var(--green)}.negative{color:var(--red)}.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(290px,1fr);gap:15px}.panel{padding:17px;margin-bottom:15px;overflow:hidden}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.panel h2{font-size:16px;margin:0}.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th{text-align:right;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:9px 8px;border-bottom:1px solid var(--line)}td{text-align:right;padding:11px 8px;border-bottom:1px solid rgba(37,52,77,.65);font-size:13px}th:first-child,td:first-child{text-align:left}.symbol{font-weight:800}.company{color:var(--muted);font-size:11px}.table-actions button{padding:6px 9px;font-size:12px}.stock-name{display:flex;flex-direction:column}.empty{text-align:center;color:var(--muted);padding:22px}.controls{display:flex;gap:8px;align-items:center}.controls select,input{background:#0b1526;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px}.controls input{width:85px}.history-list{max-height:300px;overflow:auto}.notice{font-size:12px;color:var(--muted);margin:8px 0 0}.status{min-height:22px;color:var(--gold);font-size:13px}.footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}.up{color:var(--green)}.down{color:var(--red)}
-    @media(max-width:850px){.layout{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:550px){.wrap{padding:14px}.top{align-items:flex-start}.top-actions{flex-direction:column;align-items:flex-end}.value{font-size:21px}.welcome{padding:15px}}
+    :root{--bg:#08111f;--panel:#0f1b2d;--panel2:#15243a;--line:#233552;--text:#f4f7fc;--muted:#91a2bb;--green:#35d49b;--red:#ff7181;--blue:#72aaff;--gold:#ffc96b}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -20%,#1b3557 0,#08111f 42%,#07101d 100%);color:var(--text);font:14px/1.45 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:8px;padding:10px 13px;font-weight:800;color:#06141a;background:var(--green);transition:.16s transform,.16s filter}button:hover{filter:brightness(1.08);transform:translateY(-1px)}button:active{transform:translateY(0)}button:disabled{opacity:.4;cursor:not-allowed}.secondary{color:var(--text)!important;background:var(--panel2)!important;border:1px solid var(--line)}.sell{color:#fff!important;background:var(--red)!important}.wrap{max-width:1380px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-size:21px;font-weight:900;letter-spacing:-.5px}.brand i{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:8px;border-radius:8px;background:var(--green);color:#092118;font-style:normal}.brand em{color:var(--green);font-style:normal}.market-status{display:flex;align-items:center;gap:8px;color:var(--green);font-size:12px;font-weight:800}.market-status:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}.top-actions{display:flex;gap:9px}.market-day{border:1px solid var(--line);border-radius:8px;padding:8px 11px;color:var(--muted);font-size:12px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.card,.panel{background:rgba(15,27,45,.96);border:1px solid var(--line);border-radius:12px}.card{padding:16px;position:relative;overflow:hidden}.card:after{content:"";position:absolute;right:-18px;bottom:-28px;width:78px;height:78px;border-radius:50%;background:rgba(114,170,255,.05)}.label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.09em}.value{font-size:25px;font-weight:850;margin:4px 0 2px}.positive{color:var(--green)}.negative{color:var(--red)}.subtle{color:var(--muted);font-size:12px}.layout{display:grid;grid-template-columns:minmax(0,1.65fr) 330px;gap:14px}.panel{padding:16px;margin-bottom:14px}.heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.heading h2{font-size:15px;margin:0}.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th{color:var(--muted);text-align:right;font-size:10px;text-transform:uppercase;letter-spacing:.07em;padding:8px;border-bottom:1px solid var(--line)}td{text-align:right;padding:10px 8px;border-bottom:1px solid rgba(35,53,82,.7);font-size:12px}th:first-child,td:first-child{text-align:left}.symbol{font-weight:850}.company{display:block;color:var(--muted);font-size:10px}.up{color:var(--green)}.down{color:var(--red)}.mini-change{display:inline-block;min-width:78px;padding:4px 7px;border-radius:6px;font-weight:800}.mini-change.up{background:rgba(53,212,155,.1)}.mini-change.down{background:rgba(255,113,129,.1)}.table-actions button{padding:6px 9px}.empty{text-align:center;color:var(--muted);padding:25px}.order-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}.order-tabs button{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}.order-tabs button.active{background:var(--green);color:#07151b;border-color:var(--green)}.order-tabs button.sell-active{background:var(--red);color:#fff;border-color:var(--red)}.field-label{display:block;color:var(--muted);font-size:11px;margin:0 0 6px}.controls{display:grid;grid-template-columns:1fr 92px;gap:8px;margin-bottom:9px}.controls select,.controls input{width:100%;background:#091524;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px}.quick-amounts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}.quick-amounts button{padding:7px 3px;background:var(--panel2);color:var(--muted);border:1px solid var(--line)}.order-total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:10px 0}.order-total strong{font-size:17px}.full{width:100%;height:40px}.status{min-height:20px;margin-top:8px;color:var(--gold);font-size:12px}.history-list{max-height:260px;overflow:auto}.trade-row{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}.trade-side{font-weight:900;font-size:11px}.ticker-strip{display:flex;gap:8px;margin:0 0 14px;overflow:hidden}.ticker{flex:1;min-width:140px;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:rgba(15,27,45,.7)}.ticker strong{margin-right:7px}.footer{text-align:center;color:var(--muted);font-size:11px;padding:5px}.spark{height:30px;width:72px;display:inline-block;vertical-align:middle;margin-left:8px}.spark polyline{fill:none;stroke-width:2}.toast{position:fixed;right:20px;bottom:20px;max-width:320px;padding:12px 15px;border:1px solid var(--line);border-radius:9px;background:#17273d;box-shadow:0 12px 35px rgba(0,0,0,.35);opacity:0;transform:translateY(12px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:none}
+    @media(max-width:1050px){.cards{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.ticker-strip{overflow-x:auto}.ticker{flex:0 0 150px}}@media(max-width:600px){.wrap{padding:12px}.top{align-items:flex-start}.top-actions{flex-direction:column}.cards{grid-template-columns:1fr 1fr}.value{font-size:20px}.layout{display:block}.brand{font-size:18px}.ticker-strip{display:none}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <header class="top">
-      <div><div class="brand">◈ Market<span>Lab</span></div><div class="subtle">A hands-on stock market simulation</div></div>
-      <div class="top-actions"><span class="pill" id="day-label">TRADING DAY 1</span><button class="secondary" id="reset-button" type="button">Reset game</button></div>
-    </header>
-    <section class="welcome"><strong>Practice, don’t predict.</strong> Prices are fictional and move when you advance the market. Choose your own trades, monitor risk, and see how your decisions affect your portfolio. Your game saves in this browser.</section>
-    <section class="cards" aria-label="Portfolio overview">
-      <div class="card"><div class="label">Total account value</div><div class="value" id="net-worth">—</div><div class="subtle" id="overall-pl">Since start</div></div>
-      <div class="card"><div class="label">Available cash</div><div class="value" id="cash-value">—</div><div class="subtle">Ready to invest</div></div>
-      <div class="card"><div class="label">Invested value</div><div class="value" id="invested-value">—</div><div class="subtle">Current market value</div></div>
-      <div class="card"><div class="label">Unrealized P/L</div><div class="value" id="unrealized-value">—</div><div class="subtle">On your open positions</div></div>
-    </section>
-    <div class="layout">
-      <div>
-        <section class="panel">
-          <div class="panel-heading"><div><h2>Market watch</h2><div class="subtle">Simulated prices · not live market data</div></div><button id="advance-button" type="button">Advance 1 day →</button></div>
-          <div class="scroll"><table><thead><tr><th>Company</th><th>Price</th><th>Day change</th><th>Sector</th><th>Trade</th></tr></thead><tbody id="market-rows"></tbody></table></div>
-        </section>
-        <section class="panel">
-          <div class="panel-heading"><div><h2>Your portfolio</h2><div class="subtle">Positions and unrealized gains or losses</div></div></div>
-          <div class="scroll"><table><thead><tr><th>Stock</th><th>Shares</th><th>Avg cost</th><th>Market value</th><th>Unrealized P/L</th><th></th></tr></thead><tbody id="portfolio-rows"></tbody></table></div>
-        </section>
-      </div>
-      <aside>
-        <section class="panel">
-          <div class="panel-heading"><div><h2>Place an order</h2><div class="subtle">Whole shares only · no borrowing or short selling</div></div></div>
-          <div class="controls" style="margin-bottom:10px"><select id="order-symbol" aria-label="Choose stock"></select><input id="order-shares" type="number" min="1" step="1" value="1" aria-label="Number of shares"></div>
-          <div class="controls"><button id="buy-button" type="button">Buy shares</button><button class="sell" id="sell-button" type="button">Sell shares</button></div>
-          <p class="notice" id="order-estimate">Estimated order cost: —</p><div class="status" id="status" role="status" aria-live="polite"></div>
-        </section>
-        <section class="panel">
-          <div class="panel-heading"><div><h2>Recent transactions</h2><div class="subtle">Your complete activity log</div></div></div>
-          <div class="history-list" id="transaction-list"></div>
-        </section>
-        <section class="panel">
-          <h2>How it works</h2><p class="notice">Start with $100,000 in simulated cash. Buy or sell from the market list or order ticket. Advance a day to generate random market changes; more volatile stocks can move more sharply. There are no trading fees in this default version.</p><p class="notice"><strong>Note:</strong> The referenced PowerPoint was not available when this version was built. The starting balance and defaults may need to be updated to match its exact rules.</p>
-        </section>
-      </aside>
+<main class="wrap">
+  <header class="top">
+    <div><div class="brand"><i>M</i>Meridian <em>Markets</em></div><div class="market-status">SIMULATION MARKET OPEN</div></div>
+    <div class="top-actions"><div class="market-day" id="day-label">TRADING DAY 1</div><button class="secondary" id="reset-button" type="button">Reset</button></div>
+  </header>
+  <section class="cards">
+    <div class="card"><div class="label">Account value</div><div class="value" id="net-worth">—</div><div id="overall-pl" class="subtle">Since start</div></div>
+    <div class="card"><div class="label">Available cash</div><div class="value" id="cash-value">—</div><div class="subtle">Buying power</div></div>
+    <div class="card"><div class="label">Invested</div><div class="value" id="invested-value">—</div><div class="subtle">Current market value</div></div>
+    <div class="card"><div class="label">Unrealized P/L</div><div class="value" id="unrealized-value">—</div><div class="subtle">Open positions</div></div>
+  </section>
+  <div class="ticker-strip" id="ticker-strip"></div>
+  <div class="layout">
+    <div>
+      <section class="panel">
+        <div class="heading"><div><h2>Market Watch</h2><div class="subtle">Fictional prices · advance the day to move the market</div></div><button id="advance-button" type="button">Next trading day →</button></div>
+        <div class="scroll"><table><thead><tr><th>Company</th><th>Price</th><th>Day change</th><th>Trend</th><th>Sector</th><th>Trade</th></tr></thead><tbody id="market-rows"></tbody></table></div>
+      </section>
+      <section class="panel">
+        <div class="heading"><div><h2>Portfolio</h2><div class="subtle">Your open positions</div></div></div>
+        <div class="scroll"><table><thead><tr><th>Stock</th><th>Shares</th><th>Avg cost</th><th>Market value</th><th>P/L</th><th></th></tr></thead><tbody id="portfolio-rows"></tbody></table></div>
+      </section>
     </div>
-    <div class="footer">Educational simulation only. No real money, live quotes, or investment advice.</div>
-  </main>
+    <aside>
+      <section class="panel">
+        <div class="heading"><div><h2>Place order</h2><div class="subtle">Whole shares · no short selling</div></div></div>
+        <div class="order-tabs"><button id="buy-tab" class="active" type="button">BUY</button><button id="sell-tab" type="button">SELL</button></div>
+        <label class="field-label" for="order-symbol">Stock</label>
+        <div class="controls"><select id="order-symbol"></select><input id="order-shares" type="number" min="1" step="1" value="1" aria-label="Shares"></div>
+        <label class="field-label">Quick quantities</label><div class="quick-amounts"><button type="button" data-qty="1">1</button><button type="button" data-qty="10">10</button><button type="button" data-qty="25">25</button><button type="button" data-qty="max">Max</button></div>
+        <div class="order-total"><span class="subtle" id="order-estimate">Estimated value</span><strong id="order-total">—</strong></div>
+        <button class="full" id="submit-order" type="button">Buy shares</button><div class="status" id="status" role="status"></div>
+      </section>
+      <section class="panel"><div class="heading"><div><h2>Transaction history</h2><div class="subtle">Recent activity</div></div></div><div class="history-list" id="transaction-list"></div></section>
+    </aside>
+  </div>
+  <div class="footer">Educational simulation · fictional prices · no real money or investment advice</div>
+</main>
+<div class="toast" id="toast"></div>
 <script>
 'use strict';
-
-// Edit this value and the stock list to customize the simulation.
-const STARTING_CASH = 100000;
-const SAVE_KEY = 'marketlab-stock-sim-v1';
-const ORIGINAL_STOCKS = [
-  {symbol:'AAPL', name:'Apple', price:228.50, volatility:.018, sector:'Technology', pe:34.2},
-  {symbol:'MSFT', name:'Microsoft', price:420.10, volatility:.016, sector:'Technology', pe:36.8},
-  {symbol:'NVDA', name:'NVIDIA', price:138.85, volatility:.032, sector:'Semiconductors', pe:52.4},
-  {symbol:'AMZN', name:'Amazon', price:192.35, volatility:.024, sector:'Consumer / Cloud', pe:41.1},
-  {symbol:'TSLA', name:'Tesla', price:352.56, volatility:.045, sector:'Automotive', pe:79.3},
-  {symbol:'JPM', name:'JPMorgan Chase', price:237.20, volatility:.014, sector:'Financials', pe:14.2},
-  {symbol:'JNJ', name:'Johnson & Johnson', price:158.40, volatility:.012, sector:'Healthcare', pe:24.6},
-  {symbol:'XOM', name:'Exxon Mobil', price:112.75, volatility:.022, sector:'Energy', pe:14.8}
-];
-
-function freshGame(){
-  return {cash:STARTING_CASH, day:1, stocks:ORIGINAL_STOCKS.map(s=>({...s, previous:s.price})), holdings:{}, transactions:[]};
-}
-function loadGame(){
-  try { const saved=JSON.parse(localStorage.getItem(SAVE_KEY)); if(saved && Array.isArray(saved.stocks) && typeof saved.cash==='number') return saved; }
-  catch(error) { console.warn('Could not load saved game:', error); }
-  return freshGame();
-}
-let game=loadGame();
-const money=value=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(value);
-const findStock=symbol=>game.stocks.find(stock=>stock.symbol===symbol);
-const heldShares=symbol=>(game.holdings[symbol]||{}).shares||0;
-const invested=()=>game.stocks.reduce((sum,stock)=>sum+heldShares(stock.symbol)*stock.price,0);
-const unrealized=()=>game.stocks.reduce((sum,stock)=>{const h=game.holdings[stock.symbol];return sum+(h?h.shares*(stock.price-h.averageCost):0)},0);
-const netWorth=()=>game.cash+invested();
-function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(game));}
-function escapeText(text){const node=document.createElement('span');node.textContent=String(text);return node.innerHTML;}
-
+const STARTING_CASH=100000,SAVE_KEY='meridian-markets-v2';
+const ORIGINAL_STOCKS=[
+ {symbol:'AAPL',name:'Apple',price:228.50,volatility:.018,sector:'Technology',pe:34.2,history:[228.5,227.8,229.4,230.1,228.5]},
+ {symbol:'MSFT',name:'Microsoft',price:420.10,volatility:.016,sector:'Technology',pe:36.8,history:[418.2,419.7,417.9,419.1,420.1]},
+ {symbol:'NVDA',name:'NVIDIA',price:138.85,volatility:.032,sector:'Semiconductors',pe:52.4,history:[135.1,137.2,134.8,139.4,138.85]},
+ {symbol:'AMZN',name:'Amazon',price:192.35,volatility:.024,sector:'Consumer / Cloud',pe:41.1,history:[190.4,191.8,193.2,191.1,192.35]},
+ {symbol:'TSLA',name:'Tesla',price:352.56,volatility:.045,sector:'Automotive',pe:79.3,history:[348.1,355.6,349.8,358.2,352.56]},
+ {symbol:'JPM',name:'JPMorgan Chase',price:237.20,volatility:.014,sector:'Financials',pe:14.2,history:[235.8,236.4,238.1,237.5,237.2]},
+ {symbol:'JNJ',name:'Johnson & Johnson',price:158.40,volatility:.012,sector:'Healthcare',pe:24.6,history:[157.9,158.8,159.1,158.2,158.4]},
+ {symbol:'XOM',name:'Exxon Mobil',price:112.75,volatility:.022,sector:'Energy',pe:14.8,history:[111.2,112.1,111.7,113.4,112.75]}];
+function freshGame(){return{cash:STARTING_CASH,day:1,stocks:ORIGINAL_STOCKS.map(s=>({...s,previous:s.price,history:[...(s.history||[])]})),holdings:{},transactions:[]}}
+function loadGame(){try{const x=JSON.parse(localStorage.getItem(SAVE_KEY));if(x&&Array.isArray(x.stocks)&&typeof x.cash==='number')return x}catch(e){console.warn(e)}return freshGame()}
+let game=loadGame(),orderSide='BUY';
+const money=v=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(v);
+const stockBy=s=>game.stocks.find(x=>x.symbol===s);const shares=s=>(game.holdings[s]||{}).shares||0;
+const invested=()=>game.stocks.reduce((n,s)=>n+shares(s.symbol)*s.price,0);const netWorth=()=>game.cash+invested();
+const unrealized=()=>game.stocks.reduce((n,s)=>{const h=game.holdings[s.symbol];return n+(h?h.shares*(s.price-h.averageCost):0)},0);
+function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(game))}
+function escapeText(v){const n=document.createElement('span');n.textContent=String(v);return n.innerHTML}
+function sparkline(stock){const h=stock.history||[stock.previous||stock.price,stock.price],w=72,height=28,min=Math.min(...h),max=Math.max(...h),range=max-min||1,pts=h.map((v,i)=>`${i/(h.length-1)*w},${height-(v-min)/range*(height-4)-2}`).join(' ');return`<svg class="spark" viewBox="0 0 ${w} ${height}"><polyline style="stroke:${stock.price>=stock.previous?'#35d49b':'#ff7181'}" points="${pts}"/></svg>`}
+function setAmount(id,text,v){const e=document.getElementById(id);e.textContent=text;e.className=`subtle ${v>=0?'positive':'negative'}`}
 function render(){
-  document.getElementById('day-label').textContent=`TRADING DAY ${game.day}`;
-  document.getElementById('net-worth').textContent=money(netWorth());
-  document.getElementById('cash-value').textContent=money(game.cash);
-  document.getElementById('invested-value').textContent=money(invested());
-  const totalPL=netWorth()-STARTING_CASH, unrealizedPL=unrealized();
-  setAmount('overall-pl',`${totalPL>=0?'+':''}${money(totalPL)} since start`,totalPL);
-  setAmount('unrealized-value',`${unrealizedPL>=0?'+':''}${money(unrealizedPL)}`,unrealizedPL);
-  const marketRows=document.getElementById('market-rows');
-  marketRows.innerHTML=game.stocks.map(stock=>{
-    const change=stock.price-stock.previous, percent=stock.previous?change/stock.previous*100:0;
-    return `<tr><td><span class="stock-name"><span class="symbol">${escapeText(stock.symbol)}</span><span class="company">${escapeText(stock.name)} · P/E ${stock.pe}</span></span></td><td>${money(stock.price)}</td><td class="${change>=0?'up':'down'}">${change>=0?'+':''}${money(change)} (${percent>=0?'+':''}${percent.toFixed(2)}%)</td><td>${escapeText(stock.sector)}</td><td class="table-actions"><button class="secondary quick-buy" data-symbol="${escapeText(stock.symbol)}" type="button">Trade</button></td></tr>`;
-  }).join('');
-  const portfolioRows=document.getElementById('portfolio-rows');
-  const positions=game.stocks.filter(stock=>heldShares(stock.symbol)>0);
-  portfolioRows.innerHTML=positions.length?positions.map(stock=>{
-    const holding=game.holdings[stock.symbol], value=holding.shares*stock.price, pl=holding.shares*(stock.price-holding.averageCost);
-    return `<tr><td class="symbol">${escapeText(stock.symbol)}</td><td>${holding.shares}</td><td>${money(holding.averageCost)}</td><td>${money(value)}</td><td class="${pl>=0?'up':'down'}">${pl>=0?'+':''}${money(pl)}</td><td class="table-actions"><button class="sell quick-sell" data-symbol="${escapeText(stock.symbol)}" type="button">Sell</button></td></tr>`;
-  }).join(''):'<tr><td colspan="6" class="empty">No positions yet. Choose a stock above to make your first trade.</td></tr>';
-  const selector=document.getElementById('order-symbol'), selected=selector.value;
-  selector.innerHTML=game.stocks.map(s=>`<option value="${escapeText(s.symbol)}">${escapeText(s.symbol)} — ${escapeText(s.name)}</option>`).join('');
-  if(findStock(selected)) selector.value=selected;
-  renderTransactions(); updateEstimate();
+ document.getElementById('day-label').textContent=`TRADING DAY ${game.day}`;
+ document.getElementById('net-worth').textContent=money(netWorth());document.getElementById('cash-value').textContent=money(game.cash);document.getElementById('invested-value').textContent=money(invested());
+ const pl=netWorth()-STARTING_CASH,u=unrealized();setAmount('overall-pl',`${pl>=0?'+':''}${money(pl)} since start`,pl);setAmount('unrealized-value',`${u>=0?'+':''}${money(u)}`,u);
+ document.getElementById('market-rows').innerHTML=game.stocks.map(s=>{const ch=s.price-s.previous,pct=s.previous?ch/s.previous*100:0;return`<tr><td><span class="symbol">${escapeText(s.symbol)}</span><span class="company">${escapeText(s.name)} · P/E ${s.pe}</span></td><td>${money(s.price)}</td><td><span class="mini-change ${ch>=0?'up':'down'}">${ch>=0?'+':''}${pct.toFixed(2)}%</span></td><td>${sparkline(s)}</td><td>${escapeText(s.sector)}</td><td class="table-actions"><button class="secondary trade" data-symbol="${s.symbol}" type="button">Trade</button></td></tr>`}).join('');
+ const positions=game.stocks.filter(s=>shares(s.symbol)>0);document.getElementById('portfolio-rows').innerHTML=positions.length?positions.map(s=>{const h=game.holdings[s.symbol],v=h.shares*s.price,p=v-h.shares*h.averageCost;return`<tr><td class="symbol">${s.symbol}</td><td>${h.shares}</td><td>${money(h.averageCost)}</td><td>${money(v)}</td><td class="${p>=0?'up':'down'}">${p>=0?'+':''}${money(p)}</td><td class="table-actions"><button class="sell prepare-sell" data-symbol="${s.symbol}" type="button">Sell</button></td></tr>`}).join(''):'<tr><td colspan="6" class="empty">No positions yet — choose a stock to make your first trade.</td></tr>';
+ const ticker=document.getElementById('ticker-strip');ticker.innerHTML=game.stocks.slice(0,5).map(s=>{const pct=s.previous?(s.price-s.previous)/s.previous*100:0;return`<div class="ticker"><strong>${s.symbol}</strong><span class="${pct>=0?'up':'down'}">${s.price.toFixed(2)} ${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span></div>`}).join('');
+ const sel=document.getElementById('order-symbol'),old=sel.value;sel.innerHTML=game.stocks.map(s=>`<option value="${s.symbol}">${s.symbol} — ${s.name}</option>`).join('');if(stockBy(old))sel.value=old;
+ renderHistory();updateOrder();
 }
-function setAmount(id,text,value){const el=document.getElementById(id);el.textContent=text;el.className=`subtle ${value>=0?'positive':'negative'}`;}
-function renderTransactions(){
-  const list=document.getElementById('transaction-list');
-  if(!game.transactions.length){list.innerHTML='<div class="empty">No trades yet.</div>';return;}
-  list.innerHTML=[...game.transactions].reverse().map(t=>`<div style="padding:9px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px"><div><strong class="${t.side==='BUY'?'positive':'negative'}">${t.side}</strong> ${t.shares} ${escapeText(t.symbol)}<div class="subtle">Day ${t.day} · ${escapeText(t.time)}</div></div><strong>${money(t.shares*t.price)}</strong></div>`).join('');
-}
-function updateEstimate(){const stock=findStock(document.getElementById('order-symbol').value);const shares=Math.floor(Number(document.getElementById('order-shares').value));document.getElementById('order-estimate').textContent=stock&&shares>0?`Estimated order value: ${money(stock.price*shares)} · Current price ${money(stock.price)}`:'Enter a whole number of shares.';}
-function order(side){
-  const symbol=document.getElementById('order-symbol').value, stock=findStock(symbol), shares=Number(document.getElementById('order-shares').value), status=document.getElementById('status');
-  if(!stock||!Number.isInteger(shares)||shares<1){status.textContent='Enter a positive whole number of shares.';return;}
-  const total=shares*stock.price;
-  if(side==='BUY'){
-    if(total>game.cash){status.textContent=`Not enough cash. You need ${money(total)}.`;return;}
-    const holding=game.holdings[symbol]||{shares:0,averageCost:0};
-    holding.averageCost=(holding.shares*holding.averageCost+total)/(holding.shares+shares);holding.shares+=shares;game.holdings[symbol]=holding;game.cash-=total;
-  }else{
-    const holding=game.holdings[symbol];if(!holding||holding.shares<shares){status.textContent=`You do not have ${shares} ${symbol} share(s) to sell.`;return;}
-    holding.shares-=shares;game.cash+=total;if(holding.shares===0)holding.averageCost=0;
-  }
-  game.transactions.push({side,symbol,shares,price:stock.price,day:game.day,time:new Date().toLocaleString()});
-  status.textContent=`${side==='BUY'?'Bought':'Sold'} ${shares} ${symbol} share(s) for ${money(total)}.`;save();render();
-}
-function advanceDay(){
-  game.stocks.forEach(stock=>{stock.previous=stock.price;let move=randomNormal(.0003,stock.volatility);if(Math.random()<.08)move+=randomNormal(0,stock.volatility*2.5);stock.price=Math.max(1,Math.round(stock.price*(1+move)*100)/100);});
-  game.day++;save();render();document.getElementById('status').textContent='New simulated market prices are available.';
-}
-function randomNormal(mean,sd){const u=1-Math.random(),v=1-Math.random();return mean+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
-
-document.getElementById('order-symbol').addEventListener('change',updateEstimate);
-document.getElementById('order-shares').addEventListener('input',updateEstimate);
-document.getElementById('buy-button').addEventListener('click',()=>order('BUY'));
-document.getElementById('sell-button').addEventListener('click',()=>order('SELL'));
-document.getElementById('advance-button').addEventListener('click',advanceDay);
-document.getElementById('market-rows').addEventListener('click',event=>{const button=event.target.closest('.quick-buy');if(button){document.getElementById('order-symbol').value=button.dataset.symbol;updateEstimate();document.getElementById('order-shares').focus();}});
-document.getElementById('portfolio-rows').addEventListener('click',event=>{const button=event.target.closest('.quick-sell');if(button){document.getElementById('order-symbol').value=button.dataset.symbol;updateEstimate();order('SELL');}});
-document.getElementById('reset-button').addEventListener('click',()=>{if(confirm('Reset the game? This clears your portfolio and transaction history.')){game=freshGame();save();render();document.getElementById('status').textContent='Game reset. You are ready to start again.';}});
+function renderHistory(){const list=document.getElementById('transaction-list');if(!game.transactions.length){list.innerHTML='<div class="empty">No trades yet</div>';return}list.innerHTML=[...game.transactions].reverse().slice(0,30).map(t=>`<div class="trade-row"><div><span class="trade-side ${t.side==='BUY'?'positive':'negative'}">${t.side}</span> ${t.shares} ${t.symbol}<div class="subtle">Day ${t.day} · ${t.time}</div></div><strong>${money(t.shares*t.price)}</strong></div>`).join('')}
+function updateOrder(){const s=stockBy(document.getElementById('order-symbol').value),q=Math.floor(Number(document.getElementById('order-shares').value));const total=s&&q>0?s.price*q:0;document.getElementById('order-total').textContent=total?money(total):'—';document.getElementById('order-estimate').textContent=s?`${q>0?q+' shares':'Enter quantity'} @ ${money(s.price)}`:'—'}
+function toast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('show'),2600)}
+function setSide(side){orderSide=side;document.getElementById('buy-tab').className=side==='BUY'?'active':'';document.getElementById('sell-tab').className=side==='SELL'?'sell-active':'';const b=document.getElementById('submit-order');b.textContent=side==='BUY'?'Buy shares':'Sell shares';b.className='full '+(side==='SELL'?'sell':'')}
+function submitOrder(){const symbol=document.getElementById('order-symbol').value,s=stockBy(symbol),q=Math.floor(Number(document.getElementById('order-shares').value)),status=document.getElementById('status');if(!s||q<1){status.textContent='Enter a positive whole number of shares.';return}const total=q*s.price;
+ if(orderSide==='BUY'){if(total>game.cash){status.textContent=`Not enough cash. Required: ${money(total)}.`;return}const h=game.holdings[symbol]||{shares:0,averageCost:0};h.averageCost=(h.shares*h.averageCost+total)/(h.shares+q);h.shares+=q;game.holdings[symbol]=h;game.cash-=total}
+ else{const h=game.holdings[symbol];if(!h||h.shares<q){status.textContent=`You own ${h?h.shares:0} share(s) of ${symbol}.`;return}h.shares-=q;if(h.shares===0)h.averageCost=0;game.cash+=total}
+ game.transactions.push({side:orderSide,symbol,shares:q,price:s.price,day:game.day,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});status.textContent=`${orderSide==='BUY'?'Bought':'Sold'} ${q} ${symbol} for ${money(total)}.`;save();render();toast(status.textContent)}
+function randomNormal(mean,sd){const u=1-Math.random(),v=1-Math.random();return mean+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function advanceDay(){game.stocks.forEach(s=>{s.previous=s.price;let m=randomNormal(.0004,s.volatility);if(Math.random()<.08)m+=randomNormal(0,s.volatility*2.5);s.price=Math.max(1,Math.round(s.price*(1+m)*100)/100);if(!Array.isArray(s.history))s.history=[];s.history.push(s.price);if(s.history.length>18)s.history.shift()});game.day++;save();render();toast(`Trading day ${game.day}: prices updated`)}
+document.getElementById('advance-button').addEventListener('click',advanceDay);document.getElementById('submit-order').addEventListener('click',submitOrder);document.getElementById('order-symbol').addEventListener('change',updateOrder);document.getElementById('order-shares').addEventListener('input',updateOrder);document.getElementById('buy-tab').addEventListener('click',()=>setSide('BUY'));document.getElementById('sell-tab').addEventListener('click',()=>setSide('SELL'));
+document.querySelectorAll('.quick-amounts button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.qty==='max'){const s=stockBy(document.getElementById('order-symbol').value);document.getElementById('order-shares').value=orderSide==='BUY'?Math.floor(game.cash/s.price):shares(s.symbol)}else document.getElementById('order-shares').value=b.dataset.qty;updateOrder()}));
+document.getElementById('market-rows').addEventListener('click',e=>{const b=e.target.closest('.trade');if(b){document.getElementById('order-symbol').value=b.dataset.symbol;updateOrder();document.getElementById('order-shares').focus()}});document.getElementById('portfolio-rows').addEventListener('click',e=>{const b=e.target.closest('.prepare-sell');if(b){setSide('SELL');document.getElementById('order-symbol').value=b.dataset.symbol;document.getElementById('order-shares').value=shares(b.dataset.symbol);updateOrder();document.getElementById('order-shares').focus()}});
+document.getElementById('reset-button').addEventListener('click',()=>{if(confirm('Reset the game? This clears your portfolio and transaction history.')){game=freshGame();save();render();toast('Game reset — $100,000 ready')}});
 render();
 </script>
 </body>
