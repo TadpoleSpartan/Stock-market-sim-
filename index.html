@@ -3,102 +3,766 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#08111f">
-  <title>Meridian Markets — Stock Market Simulator</title>
+  <title>Stock Market Game</title>
   <style>
-    :root{--bg:#08111f;--panel:#0f1b2d;--panel2:#15243a;--line:#233552;--text:#f4f7fc;--muted:#91a2bb;--green:#35d49b;--red:#ff7181;--blue:#72aaff;--gold:#ffc96b}
-    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -20%,#1b3557 0,#08111f 42%,#07101d 100%);color:var(--text);font:14px/1.45 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:8px;padding:10px 13px;font-weight:800;color:#06141a;background:var(--green);transition:.16s transform,.16s filter}button:hover{filter:brightness(1.08);transform:translateY(-1px)}button:active{transform:translateY(0)}button:disabled{opacity:.4;cursor:not-allowed}.secondary{color:var(--text)!important;background:var(--panel2)!important;border:1px solid var(--line)}.sell{color:#fff!important;background:var(--red)!important}.wrap{max-width:1380px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-size:21px;font-weight:900;letter-spacing:-.5px}.brand i{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:8px;border-radius:8px;background:var(--green);color:#092118;font-style:normal}.brand em{color:var(--green);font-style:normal}.market-status{display:flex;align-items:center;gap:8px;color:var(--green);font-size:12px;font-weight:800}.market-status:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}.top-actions{display:flex;gap:9px}.market-day{border:1px solid var(--line);border-radius:8px;padding:8px 11px;color:var(--muted);font-size:12px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.card,.panel{background:rgba(15,27,45,.96);border:1px solid var(--line);border-radius:12px}.card{padding:16px;position:relative;overflow:hidden}.card:after{content:"";position:absolute;right:-18px;bottom:-28px;width:78px;height:78px;border-radius:50%;background:rgba(114,170,255,.05)}.label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.09em}.value{font-size:25px;font-weight:850;margin:4px 0 2px}.positive{color:var(--green)}.negative{color:var(--red)}.subtle{color:var(--muted);font-size:12px}.layout{display:grid;grid-template-columns:minmax(0,1.65fr) 330px;gap:14px}.panel{padding:16px;margin-bottom:14px}.heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.heading h2{font-size:15px;margin:0}.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th{color:var(--muted);text-align:right;font-size:10px;text-transform:uppercase;letter-spacing:.07em;padding:8px;border-bottom:1px solid var(--line)}td{text-align:right;padding:10px 8px;border-bottom:1px solid rgba(35,53,82,.7);font-size:12px}th:first-child,td:first-child{text-align:left}.symbol{font-weight:850}.company{display:block;color:var(--muted);font-size:10px}.up{color:var(--green)}.down{color:var(--red)}.mini-change{display:inline-block;min-width:78px;padding:4px 7px;border-radius:6px;font-weight:800}.mini-change.up{background:rgba(53,212,155,.1)}.mini-change.down{background:rgba(255,113,129,.1)}.table-actions button{padding:6px 9px}.empty{text-align:center;color:var(--muted);padding:25px}.order-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}.order-tabs button{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}.order-tabs button.active{background:var(--green);color:#07151b;border-color:var(--green)}.order-tabs button.sell-active{background:var(--red);color:#fff;border-color:var(--red)}.field-label{display:block;color:var(--muted);font-size:11px;margin:0 0 6px}.controls{display:grid;grid-template-columns:1fr 92px;gap:8px;margin-bottom:9px}.controls select,.controls input{width:100%;background:#091524;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px}.quick-amounts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}.quick-amounts button{padding:7px 3px;background:var(--panel2);color:var(--muted);border:1px solid var(--line)}.order-total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:10px 0}.order-total strong{font-size:17px}.full{width:100%;height:40px}.status{min-height:20px;margin-top:8px;color:var(--gold);font-size:12px}.history-list{max-height:260px;overflow:auto}.trade-row{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}.trade-side{font-weight:900;font-size:11px}.ticker-strip{display:flex;gap:8px;margin:0 0 14px;overflow:hidden}.ticker{flex:1;min-width:140px;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:rgba(15,27,45,.7)}.ticker strong{margin-right:7px}.footer{text-align:center;color:var(--muted);font-size:11px;padding:5px}.spark{height:30px;width:72px;display:inline-block;vertical-align:middle;margin-left:8px}.spark polyline{fill:none;stroke-width:2}.toast{position:fixed;right:20px;bottom:20px;max-width:320px;padding:12px 15px;border:1px solid var(--line);border-radius:9px;background:#17273d;box-shadow:0 12px 35px rgba(0,0,0,.35);opacity:0;transform:translateY(12px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:none}
-    @media(max-width:1050px){.cards{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.ticker-strip{overflow-x:auto}.ticker{flex:0 0 150px}}@media(max-width:600px){.wrap{padding:12px}.top{align-items:flex-start}.top-actions{flex-direction:column}.cards{grid-template-columns:1fr 1fr}.value{font-size:20px}.layout{display:block}.brand{font-size:18px}.ticker-strip{display:none}}
+    body {
+      margin: 0;
+      background: #edf4ff;
+      color: #1c2b44;
+      font-family: Arial, sans-serif;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 15px;
+    }
+
+    h1, h2, h3, p {
+      margin-top: 0;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .card {
+      background: white;
+      border: 2px solid #d7e2f3;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .intro {
+      background: #fff9d9;
+      border-color: #eadb88;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      background: white;
+      border: 2px solid #d7e2f3;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .stat-name {
+      color: #667791;
+      font-size: 13px;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #dfe7f2;
+      text-align: right;
+    }
+
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+
+    th {
+      color: #667791;
+      font-size: 12px;
+    }
+
+    button, select, input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 9px 12px;
+      background: #3d73c4;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #315fA7;
+    }
+
+    .buy-button {
+      background: #168763;
+    }
+
+    .sell-button {
+      background: #c84f5b;
+    }
+
+    .gray-button {
+      background: #e7eef8;
+      color: #314866;
+    }
+
+    .green {
+      color: #168763;
+    }
+
+    .red {
+      color: #c84f5b;
+    }
+
+    .trade-box select,
+    .trade-box input {
+      width: 100%;
+      padding: 9px;
+      border: 2px solid #d7e2f3;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background: white;
+    }
+
+    .side-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .side-buttons .active-buy {
+      background: #168763;
+    }
+
+    .side-buttons .active-sell {
+      background: #c84f5b;
+    }
+
+    .full-button {
+      width: 100%;
+    }
+
+    .message {
+      min-height: 20px;
+      color: #7a6411;
+      margin-top: 8px;
+    }
+
+    .history {
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .history-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #dfe7f2;
+    }
+
+    .small {
+      color: #667791;
+      font-size: 12px;
+    }
+
+    .center {
+      text-align: center;
+      color: #667791;
+      padding: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .header {
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      th, td {
+        padding: 8px 5px;
+      }
+    }
   </style>
 </head>
 <body>
-<main class="wrap">
-  <header class="top">
-    <div><div class="brand"><i>M</i>Meridian <em>Markets</em></div><div class="market-status">SIMULATION MARKET OPEN</div></div>
-    <div class="top-actions"><div class="market-day" id="day-label">TRADING DAY 1</div><button class="secondary" id="reset-button" type="button">Reset</button></div>
-  </header>
-  <section class="cards">
-    <div class="card"><div class="label">Account value</div><div class="value" id="net-worth">—</div><div id="overall-pl" class="subtle">Since start</div></div>
-    <div class="card"><div class="label">Available cash</div><div class="value" id="cash-value">—</div><div class="subtle">Buying power</div></div>
-    <div class="card"><div class="label">Invested</div><div class="value" id="invested-value">—</div><div class="subtle">Current market value</div></div>
-    <div class="card"><div class="label">Unrealized P/L</div><div class="value" id="unrealized-value">—</div><div class="subtle">Open positions</div></div>
-  </section>
-  <div class="ticker-strip" id="ticker-strip"></div>
-  <div class="layout">
-    <div>
-      <section class="panel">
-        <div class="heading"><div><h2>Market Watch</h2><div class="subtle">Fictional prices · advance the day to move the market</div></div><button id="advance-button" type="button">Next trading day →</button></div>
-        <div class="scroll"><table><thead><tr><th>Company</th><th>Price</th><th>Day change</th><th>Trend</th><th>Sector</th><th>Trade</th></tr></thead><tbody id="market-rows"></tbody></table></div>
-      </section>
-      <section class="panel">
-        <div class="heading"><div><h2>Portfolio</h2><div class="subtle">Your open positions</div></div></div>
-        <div class="scroll"><table><thead><tr><th>Stock</th><th>Shares</th><th>Avg cost</th><th>Market value</th><th>P/L</th><th></th></tr></thead><tbody id="portfolio-rows"></tbody></table></div>
-      </section>
+  <main class="page">
+    <div class="header">
+      <div>
+        <h1>📈 Stock Market Game</h1>
+        <div class="small">A simple way to practise buying and selling stocks</div>
+      </div>
+      <div class="header-buttons">
+        <button id="nextDayButton" type="button">Next day</button>
+        <button id="resetButton" class="gray-button" type="button">Reset</button>
+      </div>
     </div>
-    <aside>
-      <section class="panel">
-        <div class="heading"><div><h2>Place order</h2><div class="subtle">Whole shares · no short selling</div></div></div>
-        <div class="order-tabs"><button id="buy-tab" class="active" type="button">BUY</button><button id="sell-tab" type="button">SELL</button></div>
-        <label class="field-label" for="order-symbol">Stock</label>
-        <div class="controls"><select id="order-symbol"></select><input id="order-shares" type="number" min="1" step="1" value="1" aria-label="Shares"></div>
-        <label class="field-label">Quick quantities</label><div class="quick-amounts"><button type="button" data-qty="1">1</button><button type="button" data-qty="10">10</button><button type="button" data-qty="25">25</button><button type="button" data-qty="max">Max</button></div>
-        <div class="order-total"><span class="subtle" id="order-estimate">Estimated value</span><strong id="order-total">—</strong></div>
-        <button class="full" id="submit-order" type="button">Buy shares</button><div class="status" id="status" role="status"></div>
-      </section>
-      <section class="panel"><div class="heading"><div><h2>Transaction history</h2><div class="subtle">Recent activity</div></div></div><div class="history-list" id="transaction-list"></div></section>
-    </aside>
-  </div>
-  <div class="footer">Educational simulation · fictional prices · no real money or investment advice</div>
-</main>
-<div class="toast" id="toast"></div>
-<script>
-'use strict';
-const STARTING_CASH=100000,SAVE_KEY='meridian-markets-v2';
-const ORIGINAL_STOCKS=[
- {symbol:'AAPL',name:'Apple',price:228.50,volatility:.018,sector:'Technology',pe:34.2,history:[228.5,227.8,229.4,230.1,228.5]},
- {symbol:'MSFT',name:'Microsoft',price:420.10,volatility:.016,sector:'Technology',pe:36.8,history:[418.2,419.7,417.9,419.1,420.1]},
- {symbol:'NVDA',name:'NVIDIA',price:138.85,volatility:.032,sector:'Semiconductors',pe:52.4,history:[135.1,137.2,134.8,139.4,138.85]},
- {symbol:'AMZN',name:'Amazon',price:192.35,volatility:.024,sector:'Consumer / Cloud',pe:41.1,history:[190.4,191.8,193.2,191.1,192.35]},
- {symbol:'TSLA',name:'Tesla',price:352.56,volatility:.045,sector:'Automotive',pe:79.3,history:[348.1,355.6,349.8,358.2,352.56]},
- {symbol:'JPM',name:'JPMorgan Chase',price:237.20,volatility:.014,sector:'Financials',pe:14.2,history:[235.8,236.4,238.1,237.5,237.2]},
- {symbol:'JNJ',name:'Johnson & Johnson',price:158.40,volatility:.012,sector:'Healthcare',pe:24.6,history:[157.9,158.8,159.1,158.2,158.4]},
- {symbol:'XOM',name:'Exxon Mobil',price:112.75,volatility:.022,sector:'Energy',pe:14.8,history:[111.2,112.1,111.7,113.4,112.75]}];
-function freshGame(){return{cash:STARTING_CASH,day:1,stocks:ORIGINAL_STOCKS.map(s=>({...s,previous:s.price,history:[...(s.history||[])]})),holdings:{},transactions:[]}}
-function loadGame(){try{const x=JSON.parse(localStorage.getItem(SAVE_KEY));if(x&&Array.isArray(x.stocks)&&typeof x.cash==='number')return x}catch(e){console.warn(e)}return freshGame()}
-let game=loadGame(),orderSide='BUY';
-const money=v=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(v);
-const stockBy=s=>game.stocks.find(x=>x.symbol===s);const shares=s=>(game.holdings[s]||{}).shares||0;
-const invested=()=>game.stocks.reduce((n,s)=>n+shares(s.symbol)*s.price,0);const netWorth=()=>game.cash+invested();
-const unrealized=()=>game.stocks.reduce((n,s)=>{const h=game.holdings[s.symbol];return n+(h?h.shares*(s.price-h.averageCost):0)},0);
-function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(game))}
-function escapeText(v){const n=document.createElement('span');n.textContent=String(v);return n.innerHTML}
-function sparkline(stock){const h=stock.history||[stock.previous||stock.price,stock.price],w=72,height=28,min=Math.min(...h),max=Math.max(...h),range=max-min||1,pts=h.map((v,i)=>`${i/(h.length-1)*w},${height-(v-min)/range*(height-4)-2}`).join(' ');return`<svg class="spark" viewBox="0 0 ${w} ${height}"><polyline style="stroke:${stock.price>=stock.previous?'#35d49b':'#ff7181'}" points="${pts}"/></svg>`}
-function setAmount(id,text,v){const e=document.getElementById(id);e.textContent=text;e.className=`subtle ${v>=0?'positive':'negative'}`}
-function render(){
- document.getElementById('day-label').textContent=`TRADING DAY ${game.day}`;
- document.getElementById('net-worth').textContent=money(netWorth());document.getElementById('cash-value').textContent=money(game.cash);document.getElementById('invested-value').textContent=money(invested());
- const pl=netWorth()-STARTING_CASH,u=unrealized();setAmount('overall-pl',`${pl>=0?'+':''}${money(pl)} since start`,pl);setAmount('unrealized-value',`${u>=0?'+':''}${money(u)}`,u);
- document.getElementById('market-rows').innerHTML=game.stocks.map(s=>{const ch=s.price-s.previous,pct=s.previous?ch/s.previous*100:0;return`<tr><td><span class="symbol">${escapeText(s.symbol)}</span><span class="company">${escapeText(s.name)} · P/E ${s.pe}</span></td><td>${money(s.price)}</td><td><span class="mini-change ${ch>=0?'up':'down'}">${ch>=0?'+':''}${pct.toFixed(2)}%</span></td><td>${sparkline(s)}</td><td>${escapeText(s.sector)}</td><td class="table-actions"><button class="secondary trade" data-symbol="${s.symbol}" type="button">Trade</button></td></tr>`}).join('');
- const positions=game.stocks.filter(s=>shares(s.symbol)>0);document.getElementById('portfolio-rows').innerHTML=positions.length?positions.map(s=>{const h=game.holdings[s.symbol],v=h.shares*s.price,p=v-h.shares*h.averageCost;return`<tr><td class="symbol">${s.symbol}</td><td>${h.shares}</td><td>${money(h.averageCost)}</td><td>${money(v)}</td><td class="${p>=0?'up':'down'}">${p>=0?'+':''}${money(p)}</td><td class="table-actions"><button class="sell prepare-sell" data-symbol="${s.symbol}" type="button">Sell</button></td></tr>`}).join(''):'<tr><td colspan="6" class="empty">No positions yet — choose a stock to make your first trade.</td></tr>';
- const ticker=document.getElementById('ticker-strip');ticker.innerHTML=game.stocks.slice(0,5).map(s=>{const pct=s.previous?(s.price-s.previous)/s.previous*100:0;return`<div class="ticker"><strong>${s.symbol}</strong><span class="${pct>=0?'up':'down'}">${s.price.toFixed(2)} ${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(2)}%</span></div>`}).join('');
- const sel=document.getElementById('order-symbol'),old=sel.value;sel.innerHTML=game.stocks.map(s=>`<option value="${s.symbol}">${s.symbol} — ${s.name}</option>`).join('');if(stockBy(old))sel.value=old;
- renderHistory();updateOrder();
-}
-function renderHistory(){const list=document.getElementById('transaction-list');if(!game.transactions.length){list.innerHTML='<div class="empty">No trades yet</div>';return}list.innerHTML=[...game.transactions].reverse().slice(0,30).map(t=>`<div class="trade-row"><div><span class="trade-side ${t.side==='BUY'?'positive':'negative'}">${t.side}</span> ${t.shares} ${t.symbol}<div class="subtle">Day ${t.day} · ${t.time}</div></div><strong>${money(t.shares*t.price)}</strong></div>`).join('')}
-function updateOrder(){const s=stockBy(document.getElementById('order-symbol').value),q=Math.floor(Number(document.getElementById('order-shares').value));const total=s&&q>0?s.price*q:0;document.getElementById('order-total').textContent=total?money(total):'—';document.getElementById('order-estimate').textContent=s?`${q>0?q+' shares':'Enter quantity'} @ ${money(s.price)}`:'—'}
-function toast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('show'),2600)}
-function setSide(side){orderSide=side;document.getElementById('buy-tab').className=side==='BUY'?'active':'';document.getElementById('sell-tab').className=side==='SELL'?'sell-active':'';const b=document.getElementById('submit-order');b.textContent=side==='BUY'?'Buy shares':'Sell shares';b.className='full '+(side==='SELL'?'sell':'')}
-function submitOrder(){const symbol=document.getElementById('order-symbol').value,s=stockBy(symbol),q=Math.floor(Number(document.getElementById('order-shares').value)),status=document.getElementById('status');if(!s||q<1){status.textContent='Enter a positive whole number of shares.';return}const total=q*s.price;
- if(orderSide==='BUY'){if(total>game.cash){status.textContent=`Not enough cash. Required: ${money(total)}.`;return}const h=game.holdings[symbol]||{shares:0,averageCost:0};h.averageCost=(h.shares*h.averageCost+total)/(h.shares+q);h.shares+=q;game.holdings[symbol]=h;game.cash-=total}
- else{const h=game.holdings[symbol];if(!h||h.shares<q){status.textContent=`You own ${h?h.shares:0} share(s) of ${symbol}.`;return}h.shares-=q;if(h.shares===0)h.averageCost=0;game.cash+=total}
- game.transactions.push({side:orderSide,symbol,shares:q,price:s.price,day:game.day,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});status.textContent=`${orderSide==='BUY'?'Bought':'Sold'} ${q} ${symbol} for ${money(total)}.`;save();render();toast(status.textContent)}
-function randomNormal(mean,sd){const u=1-Math.random(),v=1-Math.random();return mean+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
-function advanceDay(){game.stocks.forEach(s=>{s.previous=s.price;let m=randomNormal(.0004,s.volatility);if(Math.random()<.08)m+=randomNormal(0,s.volatility*2.5);s.price=Math.max(1,Math.round(s.price*(1+m)*100)/100);if(!Array.isArray(s.history))s.history=[];s.history.push(s.price);if(s.history.length>18)s.history.shift()});game.day++;save();render();toast(`Trading day ${game.day}: prices updated`)}
-document.getElementById('advance-button').addEventListener('click',advanceDay);document.getElementById('submit-order').addEventListener('click',submitOrder);document.getElementById('order-symbol').addEventListener('change',updateOrder);document.getElementById('order-shares').addEventListener('input',updateOrder);document.getElementById('buy-tab').addEventListener('click',()=>setSide('BUY'));document.getElementById('sell-tab').addEventListener('click',()=>setSide('SELL'));
-document.querySelectorAll('.quick-amounts button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.qty==='max'){const s=stockBy(document.getElementById('order-symbol').value);document.getElementById('order-shares').value=orderSide==='BUY'?Math.floor(game.cash/s.price):shares(s.symbol)}else document.getElementById('order-shares').value=b.dataset.qty;updateOrder()}));
-document.getElementById('market-rows').addEventListener('click',e=>{const b=e.target.closest('.trade');if(b){document.getElementById('order-symbol').value=b.dataset.symbol;updateOrder();document.getElementById('order-shares').focus()}});document.getElementById('portfolio-rows').addEventListener('click',e=>{const b=e.target.closest('.prepare-sell');if(b){setSide('SELL');document.getElementById('order-symbol').value=b.dataset.symbol;document.getElementById('order-shares').value=shares(b.dataset.symbol);updateOrder();document.getElementById('order-shares').focus()}});
-document.getElementById('reset-button').addEventListener('click',()=>{if(confirm('Reset the game? This clears your portfolio and transaction history.')){game=freshGame();save();render();toast('Game reset — $100,000 ready')}});
-render();
-</script>
+
+    <section class="card intro">
+      <h3>How to play</h3>
+      <p>
+        Start with <strong>$100,000</strong>. Choose a stock and buy whole shares.
+        Then press <strong>Next day</strong> to see prices change. Sell shares later
+        to make a profit. There is no real money in this game.
+      </p>
+    </section>
+
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-name">Total money</div>
+        <div class="stat-value" id="totalMoney">$0</div>
+        <div class="small" id="totalProfit">Starting value</div>
+      </div>
+      <div class="stat">
+        <div class="stat-name">Cash</div>
+        <div class="stat-value" id="cash">$0</div>
+        <div class="small">Money available to spend</div>
+      </div>
+      <div class="stat">
+        <div class="stat-name">Stock value</div>
+        <div class="stat-value" id="stockValue">$0</div>
+        <div class="small">What your shares are worth now</div>
+      </div>
+      <div class="stat">
+        <div class="stat-name">Profit or loss</div>
+        <div class="stat-value" id="profitLoss">$0</div>
+        <div class="small">Profit or loss on shares you own</div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <div>
+        <section class="card">
+          <h2>Market</h2>
+          <p class="small">Day <span id="dayNumber">1</span> · Prices are made for this game</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Today</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="marketTable"></tbody>
+          </table>
+        </section>
+
+        <section class="card">
+          <h2>Your shares</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Stock</th>
+                <th>Shares</th>
+                <th>Average price</th>
+                <th>Value</th>
+                <th>Profit/Loss</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="portfolioTable"></tbody>
+          </table>
+        </section>
+      </div>
+
+      <div>
+        <section class="card trade-box">
+          <h2>Make a trade</h2>
+
+          <div class="side-buttons">
+            <button id="buyTab" class="active-buy" type="button">Buy</button>
+            <button id="sellTab" type="button">Sell</button>
+          </div>
+
+          <label for="stockSelect">Choose a stock</label>
+          <select id="stockSelect"></select>
+
+          <label for="shareInput">Number of shares</label>
+          <input id="shareInput" type="number" min="1" step="1" value="1">
+
+          <p><strong>Estimated total:</strong> <span id="tradeTotal">$0</span></p>
+          <button id="tradeButton" class="full-button buy-button" type="button">Buy shares</button>
+          <div id="message" class="message"></div>
+        </section>
+
+        <section class="card">
+          <h2>Trade history</h2>
+          <div id="history" class="history"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Starting information
+    var startingCash = 100000;
+    var saveName = "beginnerStockGame";
+
+    // Each stock has a name and a starting price
+    var firstStocks = [
+      { symbol: "AAPL", name: "Apple", price: 228.50, change: 0, risk: 0.018 },
+      { symbol: "MSFT", name: "Microsoft", price: 420.10, change: 0, risk: 0.016 },
+      { symbol: "NVDA", name: "NVIDIA", price: 138.85, change: 0, risk: 0.032 },
+      { symbol: "AMZN", name: "Amazon", price: 192.35, change: 0, risk: 0.024 },
+      { symbol: "TSLA", name: "Tesla", price: 352.56, change: 0, risk: 0.045 },
+      { symbol: "JPM", name: "JPMorgan Chase", price: 237.20, change: 0, risk: 0.014 },
+      { symbol: "JNJ", name: "Johnson & Johnson", price: 158.40, change: 0, risk: 0.012 },
+      { symbol: "XOM", name: "Exxon Mobil", price: 112.75, change: 0, risk: 0.022 }
+    ];
+
+    // Create a new game
+    function newGame() {
+      return {
+        cash: startingCash,
+        day: 1,
+        stocks: copyStocks(),
+        shares: {},
+        history: []
+      };
+    }
+
+    // Make a copy of the stock list
+    function copyStocks() {
+      var copy = [];
+
+      for (var i = 0; i < firstStocks.length; i++) {
+        copy.push({
+          symbol: firstStocks[i].symbol,
+          name: firstStocks[i].name,
+          price: firstStocks[i].price,
+          change: 0,
+          risk: firstStocks[i].risk
+        });
+      }
+
+      return copy;
+    }
+
+    // Load a saved game, or start a new game
+    var game = newGame();
+
+    try {
+      var savedGame = JSON.parse(localStorage.getItem(saveName));
+      if (savedGame && savedGame.stocks && savedGame.cash !== undefined) {
+        game = savedGame;
+      }
+    } catch (error) {
+      game = newGame();
+    }
+
+    var tradeSide = "buy";
+
+    // Format a number as dollars
+    function dollars(amount) {
+      return "$" + Number(amount).toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    // Find a stock using its symbol
+    function findStock(symbol) {
+      for (var i = 0; i < game.stocks.length; i++) {
+        if (game.stocks[i].symbol === symbol) {
+          return game.stocks[i];
+        }
+      }
+      return null;
+    }
+
+    // Find how many shares the player owns
+    function getShareCount(symbol) {
+      if (game.shares[symbol]) {
+        return game.shares[symbol].count;
+      }
+      return 0;
+    }
+
+    // Save the game in the browser
+    function saveGame() {
+      localStorage.setItem(saveName, JSON.stringify(game));
+    }
+
+    // Calculate the value of all shares
+    function getStockValue() {
+      var total = 0;
+
+      for (var i = 0; i < game.stocks.length; i++) {
+        var stock = game.stocks[i];
+        total += getShareCount(stock.symbol) * stock.price;
+      }
+
+      return total;
+    }
+
+    // Calculate total profit or loss on shares owned
+    function getProfitLoss() {
+      var total = 0;
+
+      for (var i = 0; i < game.stocks.length; i++) {
+        var stock = game.stocks[i];
+        var owned = game.shares[stock.symbol];
+
+        if (owned) {
+          total += owned.count * (stock.price - owned.averagePrice);
+        }
+      }
+
+      return total;
+    }
+
+    // Show all information on the page
+    function showGame() {
+      var stockValue = getStockValue();
+      var totalMoney = game.cash + stockValue;
+      var profit = totalMoney - startingCash;
+      var shareProfit = getProfitLoss();
+
+      document.getElementById("dayNumber").textContent = game.day;
+      document.getElementById("cash").textContent = dollars(game.cash);
+      document.getElementById("stockValue").textContent = dollars(stockValue);
+      document.getElementById("totalMoney").textContent = dollars(totalMoney);
+      document.getElementById("profitLoss").textContent = dollars(shareProfit);
+
+      var profitText = "Profit: " + dollars(profit);
+      if (profit < 0) {
+        profitText = "Loss: " + dollars(Math.abs(profit));
+      }
+
+      document.getElementById("totalProfit").textContent = profitText;
+
+      showMarket();
+      showPortfolio();
+      showStockChoices();
+      showHistory();
+      showTradeTotal();
+    }
+
+    // Show the stock market table
+    function showMarket() {
+      var table = document.getElementById("marketTable");
+      table.innerHTML = "";
+
+      for (var i = 0; i < game.stocks.length; i++) {
+        var stock = game.stocks[i];
+        var changeClass = "green";
+        var changeText = "+" + stock.change.toFixed(2) + "%";
+
+        if (stock.change < 0) {
+          changeClass = "red";
+          changeText = stock.change.toFixed(2) + "%";
+        }
+
+        var row = document.createElement("tr");
+        row.innerHTML =
+          "<td><strong>" + stock.symbol + "</strong><br><span class='small'>" + stock.name + "</span></td>" +
+          "<td>" + dollars(stock.price) + "</td>" +
+          "<td class='" + changeClass + "'>" + changeText + "</td>" +
+          "<td><button class='trade-choice' data-symbol='" + stock.symbol + "' type='button'>Trade</button></td>";
+
+        table.appendChild(row);
+      }
+
+      var buttons = document.querySelectorAll(".trade-choice");
+      for (var j = 0; j < buttons.length; j++) {
+        buttons[j].onclick = function () {
+          document.getElementById("stockSelect").value = this.dataset.symbol;
+          showTradeTotal();
+        };
+      }
+    }
+
+    // Show the player's owned shares
+    function showPortfolio() {
+      var table = document.getElementById("portfolioTable");
+      table.innerHTML = "";
+      var hasShares = false;
+
+      for (var i = 0; i < game.stocks.length; i++) {
+        var stock = game.stocks[i];
+        var owned = game.shares[stock.symbol];
+
+        if (!owned || owned.count === 0) {
+          continue;
+        }
+
+        hasShares = true;
+        var value = owned.count * stock.price;
+        var profit = owned.count * (stock.price - owned.averagePrice);
+        var profitClass = profit >= 0 ? "green" : "red";
+
+        var row = document.createElement("tr");
+        row.innerHTML =
+          "<td><strong>" + stock.symbol + "</strong></td>" +
+          "<td>" + owned.count + "</td>" +
+          "<td>" + dollars(owned.averagePrice) + "</td>" +
+          "<td>" + dollars(value) + "</td>" +
+          "<td class='" + profitClass + "'>" + dollars(profit) + "</td>" +
+          "<td><button class='sell-button sell-choice' data-symbol='" + stock.symbol + "' type='button'>Sell</button></td>";
+
+        table.appendChild(row);
+      }
+
+      if (!hasShares) {
+        table.innerHTML = "<tr><td colspan='6' class='center'>You do not own any shares yet.</td></tr>";
+      }
+
+      var sellButtons = document.querySelectorAll(".sell-choice");
+      for (var j = 0; j < sellButtons.length; j++) {
+        sellButtons[j].onclick = function () {
+          var symbol = this.dataset.symbol;
+          setTradeSide("sell");
+          document.getElementById("stockSelect").value = symbol;
+          document.getElementById("shareInput").value = getShareCount(symbol);
+          showTradeTotal();
+        };
+      }
+    }
+
+    // Put all stocks into the dropdown
+    function showStockChoices() {
+      var select = document.getElementById("stockSelect");
+      var oldChoice = select.value;
+      select.innerHTML = "";
+
+      for (var i = 0; i < game.stocks.length; i++) {
+        var stock = game.stocks[i];
+        var option = document.createElement("option");
+        option.value = stock.symbol;
+        option.textContent = stock.symbol + " - " + stock.name;
+        select.appendChild(option);
+      }
+
+      if (findStock(oldChoice)) {
+        select.value = oldChoice;
+      }
+    }
+
+    // Show previous trades
+    function showHistory() {
+      var history = document.getElementById("history");
+
+      if (game.history.length === 0) {
+        history.innerHTML = "<div class='center'>No trades yet.</div>";
+        return;
+      }
+
+      history.innerHTML = "";
+
+      for (var i = game.history.length - 1; i >= 0; i--) {
+        var trade = game.history[i];
+        var row = document.createElement("div");
+        row.className = "history-row";
+        var sideClass = trade.side === "buy" ? "green" : "red";
+
+        row.innerHTML =
+          "<div><strong class='" + sideClass + "'>" + trade.side.toUpperNameCase() + "</strong> " +
+          trade.count + " " + trade.symbol + "<br><span class='small'>Day " + trade.day + "</span></div>" +
+          "<strong>" + dollars(trade.count * trade.price) + "</strong>";
+
+        history.appendChild(row);
+      }
+
+      // A simple text replacement for older browsers
+      if (!String.prototype.toUpperNameCase) {
+        String.prototype.toUpperNameCase = function () {
+          return this.charAt(0).toUpperCase() + this.slice(1);
+        };
+      }
+    }
+
+    // Make first letters of trade names uppercase
+    if (!String.prototype.toUpperNameCase) {
+      String.prototype.toUpperNameCase = function () {
+        return this.charAt(0).toUpperCase() + this.slice(1);
+      };
+    }
+
+    // Update the estimated trade amount
+    function showTradeTotal() {
+      var symbol = document.getElementById("stockSelect").value;
+      var stock = findStock(symbol);
+      var count = Math.floor(Number(document.getElementById("shareInput").value));
+
+      if (stock && count > 0) {
+        document.getElementById("tradeTotal").textContent = dollars(stock.price * count);
+      } else {
+        document.getElementById("tradeTotal").textContent = "$0";
+      }
+    }
+
+    // Change between buying and selling
+    function setTradeSide(side) {
+      tradeSide = side;
+      var buyTab = document.getElementById("buyTab");
+      var sellTab = document.getElementById("sellTab");
+      var tradeButton = document.getElementById("tradeButton");
+
+      buyTab.className = "";
+      sellTab.className = "";
+
+      if (side === "buy") {
+        buyTab.className = "active-buy";
+        tradeButton.className = "full-button buy-button";
+        tradeButton.textContent = "Buy shares";
+      } else {
+        sellTab.className = "active-sell";
+        tradeButton.className = "full-button sell-button";
+        tradeButton.textContent = "Sell shares";
+      }
+    }
+
+    // Buy or sell shares
+    function makeTrade() {
+      var symbol = document.getElementById("stockSelect").value;
+      var stock = findStock(symbol);
+      var count = Math.floor(Number(document.getElementById("shareInput").value));
+      var message = document.getElementById("message");
+
+      if (!stock || count < 1) {
+        message.textContent = "Enter a positive whole number of shares.";
+        return;
+      }
+
+      var total = stock.price * count;
+
+      if (tradeSide === "buy") {
+        if (total > game.cash) {
+          message.textContent = "You do not have enough cash.";
+          return;
+        }
+
+        var owned = game.shares[symbol];
+
+        if (!owned) {
+          owned = { count: 0, averagePrice: 0 };
+        }
+
+        var oldCost = owned.count * owned.averagePrice;
+        owned.count += count;
+        owned.averagePrice = (oldCost + total) / owned.count;
+        game.shares[symbol] = owned;
+        game.cash -= total;
+      } else {
+        var ownedShares = game.shares[symbol];
+
+        if (!ownedShares || ownedShares.count < count) {
+          message.textContent = "You do not own enough shares.";
+          return;
+        }
+
+        ownedShares.count -= count;
+
+        if (ownedShares.count === 0) {
+          ownedShares.averagePrice = 0;
+        }
+
+        game.cash += total;
+      }
+
+      game.history.push({
+        side: tradeSide,
+        symbol: symbol,
+        count: count,
+        price: stock.price,
+        day: game.day
+      });
+
+      if (tradeSide === "buy") {
+        message.textContent = "Bought " + count + " shares of " + symbol + ".";
+      } else {
+        message.textContent = "Sold " + count + " shares of " + symbol + ".";
+      }
+
+      saveGame();
+      showGame();
+    }
+
+    // Move to the next trading day
+    function nextDay() {
+      for (var i = 0; i < game.stocks.length; i++) {
+        var stock = game.stocks[i];
+        var oldPrice = stock.price;
+
+        // Create a random movement
+        var randomNumber = Math.random() * 2 - 1;
+        var percentChange = randomNumber * stock.risk;
+
+        // Sometimes make a bigger random change
+        if (Math.random() < 0.08) {
+          percentChange += (Math.random() * 2 - 1) * stock.risk * 2;
+        }
+
+        stock.price = Math.max(1, Math.round(stock.price * (1 + percentChange) * 100) / 100);
+        stock.change = ((stock.price - oldPrice) / oldPrice) * 100;
+      }
+
+      game.day += 1;
+      document.getElementById("message").textContent = "The new market prices are ready.";
+      saveGame();
+      showGame();
+    }
+
+    // Reset the whole game
+    function resetGame() {
+      if (confirm("Reset the game and erase all trades?")) {
+        game = newGame();
+        saveGame();
+        document.getElementById("message").textContent = "The game has been reset.";
+        showGame();
+      }
+    }
+
+    // Connect buttons to functions
+    document.getElementById("tradeButton").onclick = makeTrade;
+    document.getElementById("nextDayButton").onclick = nextDay;
+    document.getElementById("resetButton").onclick = resetGame;
+    document.getElementById("buyTab").onclick = function () { setTradeSide("buy"); };
+    document.getElementById("sellTab").onclick = function () { setTradeSide("sell"); };
+    document.getElementById("stockSelect").onchange = showTradeTotal;
+    document.getElementById("shareInput").oninput = showTradeTotal;
+
+    showGame();
+  </script>
 </body>
 </html>
