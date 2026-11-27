@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a2d">
+  <title>MarketLab — Stock Market Simulation</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b1220;--panel:#111c2f;--panel2:#17243a;--line:#25344d;--text:#eef4ff;--muted:#91a1bb;--green:#32d296;--red:#ff6b78;--blue:#77a9ff;--gold:#ffca68}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;font-weight:700;color:#071321;background:var(--green)}button:hover{filter:brightness(1.08)}button.secondary{color:var(--text);background:var(--panel2);border:1px solid var(--line)}button.sell{background:#ff8790}button:disabled{opacity:.45;cursor:not-allowed}.wrap{max-width:1250px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}.brand{font-size:22px;font-weight:850;letter-spacing:-.5px}.brand span{color:var(--green)}.subtle{color:var(--muted);font-size:13px}.top-actions{display:flex;align-items:center;gap:10px}.pill{padding:7px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}.welcome{background:linear-gradient(115deg,#182a46,#142038);border:1px solid var(--line);border-radius:14px;padding:19px 22px;margin-bottom:18px}.welcome strong{color:var(--gold)}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:17px 0}.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px}.card{padding:16px}.label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}.value{font-size:25px;font-weight:750;margin-top:5px}.positive{color:var(--green)}.negative{color:var(--red)}.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(290px,1fr);gap:15px}.panel{padding:17px;margin-bottom:15px;overflow:hidden}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}.panel h2{font-size:16px;margin:0}.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th{text-align:right;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:9px 8px;border-bottom:1px solid var(--line)}td{text-align:right;padding:11px 8px;border-bottom:1px solid rgba(37,52,77,.65);font-size:13px}th:first-child,td:first-child{text-align:left}.symbol{font-weight:800}.company{color:var(--muted);font-size:11px}.table-actions button{padding:6px 9px;font-size:12px}.stock-name{display:flex;flex-direction:column}.empty{text-align:center;color:var(--muted);padding:22px}.controls{display:flex;gap:8px;align-items:center}.controls select,input{background:#0b1526;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px}.controls input{width:85px}.history-list{max-height:300px;overflow:auto}.notice{font-size:12px;color:var(--muted);margin:8px 0 0}.status{min-height:22px;color:var(--gold);font-size:13px}.footer{color:var(--muted);font-size:12px;text-align:center;padding:12px}.up{color:var(--green)}.down{color:var(--red)}
+    @media(max-width:850px){.layout{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:550px){.wrap{padding:14px}.top{align-items:flex-start}.top-actions{flex-direction:column;align-items:flex-end}.value{font-size:21px}.welcome{padding:15px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div><div class="brand">◈ Market<span>Lab</span></div><div class="subtle">A hands-on stock market simulation</div></div>
+      <div class="top-actions"><span class="pill" id="day-label">TRADING DAY 1</span><button class="secondary" id="reset-button" type="button">Reset game</button></div>
+    </header>
+    <section class="welcome"><strong>Practice, don’t predict.</strong> Prices are fictional and move when you advance the market. Choose your own trades, monitor risk, and see how your decisions affect your portfolio. Your game saves in this browser.</section>
+    <section class="cards" aria-label="Portfolio overview">
+      <div class="card"><div class="label">Total account value</div><div class="value" id="net-worth">—</div><div class="subtle" id="overall-pl">Since start</div></div>
+      <div class="card"><div class="label">Available cash</div><div class="value" id="cash-value">—</div><div class="subtle">Ready to invest</div></div>
+      <div class="card"><div class="label">Invested value</div><div class="value" id="invested-value">—</div><div class="subtle">Current market value</div></div>
+      <div class="card"><div class="label">Unrealized P/L</div><div class="value" id="unrealized-value">—</div><div class="subtle">On your open positions</div></div>
+    </section>
+    <div class="layout">
+      <div>
+        <section class="panel">
+          <div class="panel-heading"><div><h2>Market watch</h2><div class="subtle">Simulated prices · not live market data</div></div><button id="advance-button" type="button">Advance 1 day →</button></div>
+          <div class="scroll"><table><thead><tr><th>Company</th><th>Price</th><th>Day change</th><th>Sector</th><th>Trade</th></tr></thead><tbody id="market-rows"></tbody></table></div>
+        </section>
+        <section class="panel">
+          <div class="panel-heading"><div><h2>Your portfolio</h2><div class="subtle">Positions and unrealized gains or losses</div></div></div>
+          <div class="scroll"><table><thead><tr><th>Stock</th><th>Shares</th><th>Avg cost</th><th>Market value</th><th>Unrealized P/L</th><th></th></tr></thead><tbody id="portfolio-rows"></tbody></table></div>
+        </section>
+      </div>
+      <aside>
+        <section class="panel">
+          <div class="panel-heading"><div><h2>Place an order</h2><div class="subtle">Whole shares only · no borrowing or short selling</div></div></div>
+          <div class="controls" style="margin-bottom:10px"><select id="order-symbol" aria-label="Choose stock"></select><input id="order-shares" type="number" min="1" step="1" value="1" aria-label="Number of shares"></div>
+          <div class="controls"><button id="buy-button" type="button">Buy shares</button><button class="sell" id="sell-button" type="button">Sell shares</button></div>
+          <p class="notice" id="order-estimate">Estimated order cost: —</p><div class="status" id="status" role="status" aria-live="polite"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-heading"><div><h2>Recent transactions</h2><div class="subtle">Your complete activity log</div></div></div>
+          <div class="history-list" id="transaction-list"></div>
+        </section>
+        <section class="panel">
+          <h2>How it works</h2><p class="notice">Start with $100,000 in simulated cash. Buy or sell from the market list or order ticket. Advance a day to generate random market changes; more volatile stocks can move more sharply. There are no trading fees in this default version.</p><p class="notice"><strong>Note:</strong> The referenced PowerPoint was not available when this version was built. The starting balance and defaults may need to be updated to match its exact rules.</p>
+        </section>
+      </aside>
+    </div>
+    <div class="footer">Educational simulation only. No real money, live quotes, or investment advice.</div>
+  </main>
+<script>
+'use strict';
+
+// Edit this value and the stock list to customize the simulation.
+const STARTING_CASH = 100000;
+const SAVE_KEY = 'marketlab-stock-sim-v1';
+const ORIGINAL_STOCKS = [
+  {symbol:'AAPL', name:'Apple', price:228.50, volatility:.018, sector:'Technology', pe:34.2},
+  {symbol:'MSFT', name:'Microsoft', price:420.10, volatility:.016, sector:'Technology', pe:36.8},
+  {symbol:'NVDA', name:'NVIDIA', price:138.85, volatility:.032, sector:'Semiconductors', pe:52.4},
+  {symbol:'AMZN', name:'Amazon', price:192.35, volatility:.024, sector:'Consumer / Cloud', pe:41.1},
+  {symbol:'TSLA', name:'Tesla', price:352.56, volatility:.045, sector:'Automotive', pe:79.3},
+  {symbol:'JPM', name:'JPMorgan Chase', price:237.20, volatility:.014, sector:'Financials', pe:14.2},
+  {symbol:'JNJ', name:'Johnson & Johnson', price:158.40, volatility:.012, sector:'Healthcare', pe:24.6},
+  {symbol:'XOM', name:'Exxon Mobil', price:112.75, volatility:.022, sector:'Energy', pe:14.8}
+];
+
+function freshGame(){
+  return {cash:STARTING_CASH, day:1, stocks:ORIGINAL_STOCKS.map(s=>({...s, previous:s.price})), holdings:{}, transactions:[]};
+}
+function loadGame(){
+  try { const saved=JSON.parse(localStorage.getItem(SAVE_KEY)); if(saved && Array.isArray(saved.stocks) && typeof saved.cash==='number') return saved; }
+  catch(error) { console.warn('Could not load saved game:', error); }
+  return freshGame();
+}
+let game=loadGame();
+const money=value=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(value);
+const findStock=symbol=>game.stocks.find(stock=>stock.symbol===symbol);
+const heldShares=symbol=>(game.holdings[symbol]||{}).shares||0;
+const invested=()=>game.stocks.reduce((sum,stock)=>sum+heldShares(stock.symbol)*stock.price,0);
+const unrealized=()=>game.stocks.reduce((sum,stock)=>{const h=game.holdings[stock.symbol];return sum+(h?h.shares*(stock.price-h.averageCost):0)},0);
+const netWorth=()=>game.cash+invested();
+function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(game));}
+function escapeText(text){const node=document.createElement('span');node.textContent=String(text);return node.innerHTML;}
+
+function render(){
+  document.getElementById('day-label').textContent=`TRADING DAY ${game.day}`;
+  document.getElementById('net-worth').textContent=money(netWorth());
+  document.getElementById('cash-value').textContent=money(game.cash);
+  document.getElementById('invested-value').textContent=money(invested());
+  const totalPL=netWorth()-STARTING_CASH, unrealizedPL=unrealized();
+  setAmount('overall-pl',`${totalPL>=0?'+':''}${money(totalPL)} since start`,totalPL);
+  setAmount('unrealized-value',`${unrealizedPL>=0?'+':''}${money(unrealizedPL)}`,unrealizedPL);
+  const marketRows=document.getElementById('market-rows');
+  marketRows.innerHTML=game.stocks.map(stock=>{
+    const change=stock.price-stock.previous, percent=stock.previous?change/stock.previous*100:0;
+    return `<tr><td><span class="stock-name"><span class="symbol">${escapeText(stock.symbol)}</span><span class="company">${escapeText(stock.name)} · P/E ${stock.pe}</span></span></td><td>${money(stock.price)}</td><td class="${change>=0?'up':'down'}">${change>=0?'+':''}${money(change)} (${percent>=0?'+':''}${percent.toFixed(2)}%)</td><td>${escapeText(stock.sector)}</td><td class="table-actions"><button class="secondary quick-buy" data-symbol="${escapeText(stock.symbol)}" type="button">Trade</button></td></tr>`;
+  }).join('');
+  const portfolioRows=document.getElementById('portfolio-rows');
+  const positions=game.stocks.filter(stock=>heldShares(stock.symbol)>0);
+  portfolioRows.innerHTML=positions.length?positions.map(stock=>{
+    const holding=game.holdings[stock.symbol], value=holding.shares*stock.price, pl=holding.shares*(stock.price-holding.averageCost);
+    return `<tr><td class="symbol">${escapeText(stock.symbol)}</td><td>${holding.shares}</td><td>${money(holding.averageCost)}</td><td>${money(value)}</td><td class="${pl>=0?'up':'down'}">${pl>=0?'+':''}${money(pl)}</td><td class="table-actions"><button class="sell quick-sell" data-symbol="${escapeText(stock.symbol)}" type="button">Sell</button></td></tr>`;
+  }).join(''):'<tr><td colspan="6" class="empty">No positions yet. Choose a stock above to make your first trade.</td></tr>';
+  const selector=document.getElementById('order-symbol'), selected=selector.value;
+  selector.innerHTML=game.stocks.map(s=>`<option value="${escapeText(s.symbol)}">${escapeText(s.symbol)} — ${escapeText(s.name)}</option>`).join('');
+  if(findStock(selected)) selector.value=selected;
+  renderTransactions(); updateEstimate();
+}
+function setAmount(id,text,value){const el=document.getElementById(id);el.textContent=text;el.className=`subtle ${value>=0?'positive':'negative'}`;}
+function renderTransactions(){
+  const list=document.getElementById('transaction-list');
+  if(!game.transactions.length){list.innerHTML='<div class="empty">No trades yet.</div>';return;}
+  list.innerHTML=[...game.transactions].reverse().map(t=>`<div style="padding:9px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px"><div><strong class="${t.side==='BUY'?'positive':'negative'}">${t.side}</strong> ${t.shares} ${escapeText(t.symbol)}<div class="subtle">Day ${t.day} · ${escapeText(t.time)}</div></div><strong>${money(t.shares*t.price)}</strong></div>`).join('');
+}
+function updateEstimate(){const stock=findStock(document.getElementById('order-symbol').value);const shares=Math.floor(Number(document.getElementById('order-shares').value));document.getElementById('order-estimate').textContent=stock&&shares>0?`Estimated order value: ${money(stock.price*shares)} · Current price ${money(stock.price)}`:'Enter a whole number of shares.';}
+function order(side){
+  const symbol=document.getElementById('order-symbol').value, stock=findStock(symbol), shares=Number(document.getElementById('order-shares').value), status=document.getElementById('status');
+  if(!stock||!Number.isInteger(shares)||shares<1){status.textContent='Enter a positive whole number of shares.';return;}
+  const total=shares*stock.price;
+  if(side==='BUY'){
+    if(total>game.cash){status.textContent=`Not enough cash. You need ${money(total)}.`;return;}
+    const holding=game.holdings[symbol]||{shares:0,averageCost:0};
+    holding.averageCost=(holding.shares*holding.averageCost+total)/(holding.shares+shares);holding.shares+=shares;game.holdings[symbol]=holding;game.cash-=total;
+  }else{
+    const holding=game.holdings[symbol];if(!holding||holding.shares<shares){status.textContent=`You do not have ${shares} ${symbol} share(s) to sell.`;return;}
+    holding.shares-=shares;game.cash+=total;if(holding.shares===0)holding.averageCost=0;
+  }
+  game.transactions.push({side,symbol,shares,price:stock.price,day:game.day,time:new Date().toLocaleString()});
+  status.textContent=`${side==='BUY'?'Bought':'Sold'} ${shares} ${symbol} share(s) for ${money(total)}.`;save();render();
+}
+function advanceDay(){
+  game.stocks.forEach(stock=>{stock.previous=stock.price;let move=randomNormal(.0003,stock.volatility);if(Math.random()<.08)move+=randomNormal(0,stock.volatility*2.5);stock.price=Math.max(1,Math.round(stock.price*(1+move)*100)/100);});
+  game.day++;save();render();document.getElementById('status').textContent='New simulated market prices are available.';
+}
+function randomNormal(mean,sd){const u=1-Math.random(),v=1-Math.random();return mean+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+
+document.getElementById('order-symbol').addEventListener('change',updateEstimate);
+document.getElementById('order-shares').addEventListener('input',updateEstimate);
+document.getElementById('buy-button').addEventListener('click',()=>order('BUY'));
+document.getElementById('sell-button').addEventListener('click',()=>order('SELL'));
+document.getElementById('advance-button').addEventListener('click',advanceDay);
+document.getElementById('market-rows').addEventListener('click',event=>{const button=event.target.closest('.quick-buy');if(button){document.getElementById('order-symbol').value=button.dataset.symbol;updateEstimate();document.getElementById('order-shares').focus();}});
+document.getElementById('portfolio-rows').addEventListener('click',event=>{const button=event.target.closest('.quick-sell');if(button){document.getElementById('order-symbol').value=button.dataset.symbol;updateEstimate();order('SELL');}});
+document.getElementById('reset-button').addEventListener('click',()=>{if(confirm('Reset the game? This clears your portfolio and transaction history.')){game=freshGame();save();render();document.getElementById('status').textContent='Game reset. You are ready to start again.';}});
+render();
+</script>
+</body>
+</html>
